@@ -1,3 +1,6 @@
+**J**upyter notebook for WoLframScript
+
+
 A Jupyter kernel for bash
 
 This requires IPython 3.
