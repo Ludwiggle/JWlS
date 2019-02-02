@@ -12,7 +12,7 @@ The outputs are printed both on the Jupyter notebook and on the terminal where J
 
 A custom `Show` prints a clickable url that opens Jupyter file viewer to display vector graphics and HR images in separated browser tabs (tested on Firefox).
 
-If you prefer to view low-res rasters within the notebook, check [iWolfram](https://github.com/mmatera/iwolfram) or this ["official"](https://github.com/WolframResearch/WolframLanguageForJupyter) release. These two implementations are way more complex and not so stable. The "official" one cannot be installed without a full Mathematica installation. 
+If you prefer to view low-res rasters within the notebook, check [iWolfram](https://github.com/mmatera/iwolfram) or this ["official"](https://github.com/WolframResearch/WolframLanguageForJupyter) release. These two implementations are way more complex and less rialable insofar they do not support all possible input syntax. The "official" one cannot be installed without a full Mathematica installation. 
 
 ### Usage
 
