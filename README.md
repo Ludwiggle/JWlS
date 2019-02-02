@@ -6,7 +6,7 @@ A **J**upyter notebook for **W**o**L**fram**S**cript
 
 JWLS is basically a slimmed down version of the [`bash_kernel`](https://github.com/takluyver/bash_kernel) where two pipes comunicate with the [WolframKernel](https://www.wolfram.com/cdf-player/) through the WolframScript interface. 
 
-Designed to provide a GUI for a WolframKernel in absence of the Mathematica Front-End; very handy on cloud computing services.
+Designed to provide a graphical REPL for WolframScript in absence of the Mathematica Front-End; very handy on cloud computing services.
 
 The outputs are printed both on the Jupyter notebook and on the terminal where JWLS is started; though error messages, symbols `Information` and progress indicators are printed only on terminal. 
 
