@@ -8,6 +8,13 @@ import os.path
 import re
 import signal
 
+import os
+
+# W completions
+WNames = open('/home/nicola/miniconda3/lib/python3.7/site-packages/bash_kernel/Names.wl.txt',
+              'r').read().split()
+
+
 __version__ = '0.7.1'
 
 version_pat = re.compile(r'version (\d+(\.\d+)+)')
@@ -71,10 +78,10 @@ class BashKernel(Kernel):
             self._banner = check_output(['bash', '--version']).decode('utf-8')
         return self._banner
 
-    language_info = {'name': 'bash',
+    language_info = {'name': 'IWLS',
                      'codemirror_mode': 'shell',
-                     'mimetype': 'text/x-sh',
-                     'file_extension': '.sh'}
+                     'mimetype': 'text/x-mathics',
+                     'file_extension': '.wl'}
 
     def __init__(self, **kwargs):
         Kernel.__init__(self, **kwargs)
@@ -130,17 +137,29 @@ class BashKernel(Kernel):
     def do_execute(self, code, silent, store_history=True,
                    user_expressions=None, allow_stdin=False):
         self.silent = silent
+        if not code[0] =='!':
+            # Pipe wl code into the fifo
+            code = 'echo ' + "'" + code + "'" + '> /tmp/.wlin.fifo'
+        else:
+            code = code[1:]
         if not code.strip():
             return {'status': 'ok', 'execution_count': self.execution_count,
                     'payload': [], 'user_expressions': {}}
 
         interrupted = False
         try:
+            # empty the WolframScript log file
+            self.bashwrapper.run_command("echo 'emptylogF' > /tmp/.wlin.fifo ", timeout=None)
             # Note: timeout=None tells IREPLWrapper to do incremental
             # output.  Also note that the return value from
             # run_command is not needed, because the output was
             # already sent by IREPLWrapper.
             self.bashwrapper.run_command(code.rstrip(), timeout=None)
+            # pipe the latest outputs to  .wlout.txt 
+            self.bashwrapper.run_command("echo 'catoutF' > /tmp/.wlin.fifo ", timeout=None)  
+            # show last outputs
+            self.bashwrapper.run_command('cat /tmp/.wlout.txt', timeout=None)            
+            
         except KeyboardInterrupt:
             self.bashwrapper.child.sendintr()
             interrupted = True
@@ -180,11 +199,19 @@ class BashKernel(Kernel):
         if not code or code[-1] == ' ':
             return default
 
-        tokens = code.replace(';', ' ').split()
+        tokens = code.replace(';', ' ').replace('@', ' ').replace('/', ' '
+                    ).replace('?', ' ').replace(',', ' ').replace('.', ' '
+                    ).replace('>', ' ').replace('<', ' ').replace(':', ' '
+                    ).replace('[', ' ').replace(']', ' ').replace('(', ' '
+                    ).replace(')', ' ').replace('{', ' ').replace('}', ' '
+                    ).replace('_', ' ').replace('+', ' ').replace('*', ' '
+                    ).replace('#', ' ').replace('=', ' ').replace('"', ' '
+                    ).replace('~', ' ').replace('&', ' ').replace('|', ' '
+                    ).replace('!', ' ').split()
         if not tokens:
             return default
 
-        matches = []
+        matches = WNames
         token = tokens[-1]
         start = cursor_pos - len(token)
 
