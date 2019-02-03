@@ -2,7 +2,12 @@
 
 A **J**upyter notebook for **W**olfram**L**anguage**S**cript
 
-Designed to provide a responsive HTML interface to a remote WolframScript interpreter. 
+Designed to provide a responsive HTML interface to a remote WolframScript interpreter with minimal overhead on the bash_kernel. 
+
+
+### Install
+
+### Run
 
 Run `JWLS.sh`
 

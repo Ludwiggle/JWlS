@@ -139,7 +139,7 @@ class BashKernel(Kernel):
         self.silent = silent
         if not code[0] =='!':
             # Pipe wl code into the fifo
-            code = 'echo ' + "'" + code + "'" + '> /tmp/.wlin.fifo'
+            code = 'echo ' + "'" + code + "'" + '> /tmp/JWLS/wlin.fifo'
         else:
             code = code[1:]
         if not code.strip():
@@ -149,16 +149,20 @@ class BashKernel(Kernel):
         interrupted = False
         try:
             # empty the WolframScript log file
-            self.bashwrapper.run_command("echo 'emptylogF' > /tmp/.wlin.fifo ", timeout=None)
+            self.bashwrapper.run_command("echo 'emptylogF' > /tmp/JWLS/wlin.fifo ", timeout=None)
+            # auxiliary file to check
+            self.bashwrapper.run_command("cat /tmp/JWLS/wlout.txt > /tmp/JWLS/wlout2", timeout=None)
+
             # Note: timeout=None tells IREPLWrapper to do incremental
             # output.  Also note that the return value from
             # run_command is not needed, because the output was
             # already sent by IREPLWrapper.
             self.bashwrapper.run_command(code.rstrip(), timeout=None)
             # pipe the latest outputs to  .wlout.txt 
-            self.bashwrapper.run_command("echo 'catoutF' > /tmp/.wlin.fifo ", timeout=None)  
+            self.bashwrapper.run_command("echo 'catoutF' > /tmp/JWLS/wlin.fifo ", timeout=None)  
             # show last outputs
-            self.bashwrapper.run_command('cat /tmp/.wlout.txt', timeout=None)            
+            self.bashwrapper.run_command("while cmp -s /tmp/JWLS/wlout.txt /tmp/JWLS/wlout2 ; do sleep 0.1 ; done ; sleep 0.1 ; cat /tmp/JWLS/wlout.txt", timeout=None)    
+            # self.bashwrapper.run_command('cat /tmp/JWLS/wlout.txt', timeout=None)            
             
         except KeyboardInterrupt:
             self.bashwrapper.child.sendintr()

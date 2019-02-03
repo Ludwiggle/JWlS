@@ -1,12 +1,15 @@
 #!/bin/bash
 
-rm /tmp/.wlin.fifo 2&>/dev/null
-mkfifo /tmp/.wlin.fifo
+mkdir JWLSout 2>/dev/null
 
-rm /tmp/.wlout.txt 2&>/dev/null
-touch /tmp/.wlout.txt
+rm -r /tmp/JWLS 2>/dev/null
+mkdir /tmp/JWLS 2>/dev/null
 
-tail -f /tmp/.wlin.fifo | wolframscript -c '
+
+mkfifo /tmp/JWLS/wlin.fifo
+touch /tmp/JWLS/wlout.txt
+
+tail -f /tmp/JWLS/wlin.fifo | wolframscript -c '
     
 "______________________________________________________________________"         
     nbAddrF := ReadString@"!jupyter notebook list" ~
@@ -21,10 +24,10 @@ tail -f /tmp/.wlin.fifo | wolframscript -c '
     $nbAddr = nbAddrF
 "----------------------------------------------------------------------"
     Unprotect@Show
-    Show@g_Image := "echo " <> $nbAddr <> Export["out.png",g,"PNG"] //
+    Show@g_Image := "echo " <> $nbAddr <> Export["JWLSout/out.png",g,"PNG"] //
                      (Run@#; Return@Last@StringSplit@#)&
                     
-    Show@g_ := "echo " <> $nbAddr <> Export["out.pdf",g,"PDF"] // 
+    Show@g_ := "echo " <> $nbAddr <> Export["JWLSout/out.pdf",g,"PDF"] // 
                 (Run@#; Return@Last@StringSplit@#)&
     Protect@Show
 "----------------------------------------------------------------------"          
@@ -34,7 +37,7 @@ tail -f /tmp/.wlin.fifo | wolframscript -c '
     
     emptylogF := "> " <> Streams[][[1,1]] // ghostRun
     
-    catoutF := "cat " <> Streams[][[1,1]] <> " > /tmp/.wlout.txt" // 
+    catoutF := "cat " <> Streams[][[1,1]] <> " > /tmp/JWLS/wlout.txt" // 
                 ghostRun
 "----------------------------------------------------------------------"    
     $Line = 0
