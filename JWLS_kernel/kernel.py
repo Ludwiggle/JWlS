@@ -11,7 +11,7 @@ import signal
 import os
 
 # W completions
-WNames = open('/home/nicola/miniconda3/lib/python3.7/site-packages/bash_kernel/Names.wl.txt',
+WNames = open('/home/nicola/miniconda3/lib/python3.7/site-packages/JWLS_kernel/Names.wl.txt',
               'r').read().split()
 
 
@@ -62,7 +62,7 @@ class IREPLWrapper(replwrap.REPLWrapper):
         return pos
 
 class BashKernel(Kernel):
-    implementation = 'bash_kernel'
+    implementation = 'JWLS_kernel'
     implementation_version = __version__
 
     @property
@@ -79,8 +79,8 @@ class BashKernel(Kernel):
         return self._banner
 
     language_info = {'name': 'IWLS',
-                     'codemirror_mode': 'shell',
-                     'mimetype': 'text/x-mathics',
+                     'codemirror_mode': 'mathematica',
+                     'mimetype': 'text/x-mathematica',
                      'file_extension': '.wl'}
 
     def __init__(self, **kwargs):
