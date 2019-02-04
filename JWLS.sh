@@ -30,6 +30,8 @@ tail -f /tmp/JWLS/wlin.fifo | wolframscript -c '
     Show@g_ := "echo " <> $nbAddr <> Export["JWLSout/out.pdf",g,"PDF"] // 
                 (Run@#; Return@Last@StringSplit@#)&
     Protect@Show
+    
+    $PrePrint = Shallow[#,{Infinity,10}]&
 "----------------------------------------------------------------------"          
     SetOptions[$Output,FormatType->OutputForm]
     

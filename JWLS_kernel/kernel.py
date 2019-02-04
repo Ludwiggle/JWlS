@@ -161,7 +161,7 @@ class BashKernel(Kernel):
             # pipe the latest outputs to  .wlout.txt 
             self.bashwrapper.run_command("echo 'catoutF' > /tmp/JWLS/wlin.fifo ", timeout=None)  
             # show last outputs
-            self.bashwrapper.run_command("while cmp -s /tmp/JWLS/wlout.txt /tmp/JWLS/wlout2 ; do sleep 0.1 ; done ; sleep 0.1 ; cat /tmp/JWLS/wlout.txt", timeout=None)    
+            self.bashwrapper.run_command("while cmp -s /tmp/JWLS/wlout.txt /tmp/JWLS/wlout2 ; do sleep 0.1 ; done ; sleep 0.1 ; tail -n +2 /tmp/JWLS/wlout.txt | grep . | sed '0~1 a\\\'", timeout=None)    
             # self.bashwrapper.run_command('cat /tmp/JWLS/wlout.txt', timeout=None)            
             
         except KeyboardInterrupt:
