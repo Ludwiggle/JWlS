@@ -35,8 +35,8 @@ The underlying `bash_kernel` is still accessible by starting a cell with `!`
 
 ### How it works
 
-The `JWLS.sh` script reads your `jupyter notebook list` to take note of the **first** notebook URL found; if Jupyter is not running, JWLS will start a new notebook. 
+The `JWLS.sh` script reads your `jupyter notebook list` to save the address of the **first** notebook found; that is needed by `Show`.  If Jupyter is not running, JWLS will start a new notebook. 
 
-The WolframKernel is then initiated in REPL mode waiting for commands sent by the `bashWL_kernel.py` through a temporary fifo.
-By default, wolframscript would append ouputs on a temporary log file; JWLS simply pipes the latest ouputs from that file back to Jupyter. 
+The WolframKernel is then initiated in REPL mode waiting for commands sent by the `kernel.py` through a temporary fifo.
+By default, wolframscript appends ouputs to a temporary log file; JWLS simply pipes the latest ouputs from that file back to Jupyter. 
 
