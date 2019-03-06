@@ -1,6 +1,13 @@
 #!/bin/bash
 
+clear
+
 mkdir JWLSout 2>/dev/null
+
+function finish {
+  rm -r JWLSout
+}
+
 
 rm -r /tmp/JWLS 2>/dev/null
 mkdir /tmp/JWLS 2>/dev/null
@@ -9,40 +16,51 @@ mkdir /tmp/JWLS 2>/dev/null
 mkfifo /tmp/JWLS/wlin.fifo
 touch /tmp/JWLS/wlout.txt
 
+
+
 tail -f /tmp/JWLS/wlin.fifo | wolframscript -c '
     
 "______________________________________________________________________"         
-    nbAddrF := ReadString@"!jupyter notebook list" ~
-               StringCases ~ Shortest["http://"~~__~~"/"] //
-               If [ #=={}, 
-                    (Print["\n$:"<>#]; Run@#) &@ "jupyter notebook &"; 
-                      Pause@1; nbAddrF,
-                    Print["\n~: " <> First@#]; 
-                      First@# <> "files/" 
-                  ]&
+  
+  nbAddrF := ReadString@"!jupyter notebook list"~
+             StringCases~Shortest["http://"~~__~~"/"]//
+             If[# == {}
+                 ,(Print["\n$:"<>#]; Run@#)& @"jupyter notebook &"; 
+                   Pause@1; nbAddrF
+                 ,Print["\n~: "<>First@#]; First@#<>"files/" 
+               ]&
     
-    $nbAddr = nbAddrF
-"----------------------------------------------------------------------"
-    Unprotect@Show
-    Show@g_Image := "echo " <> $nbAddr <> Export["JWLSout/out.png",g,"PNG"] //
-                     (Run@#; Return@Last@StringSplit@#)&
+  $nbAddr = nbAddrF
+______________________________________________________________________
+   
+ 
+  show@g_Image := "echo "<>$nbAddr<>Export["JWLSout/out.png",g,"PNG"]//
+                   (Run@#; Return@Last@StringSplit@#)&
                     
-    Show@g_ := "echo " <> $nbAddr <> Export["JWLSout/out.pdf",g,"PDF"] // 
-                (Run@#; Return@Last@StringSplit@#)&
-    Protect@Show
+  show@g_ := "echo "<>$nbAddr<>Export["JWLSout/out.pdf",g,"PDF"]// 
+             (Run@#; Return@Last@StringSplit@#)&
+              
+             
+             
+  Protect@show
     
-    $PrePrint = Shallow[#,{Infinity,10}]&
-"----------------------------------------------------------------------"          
-    SetOptions[$Output,FormatType->OutputForm]
+  $PrePrint = Shallow[ #,{Infinity,12}]&;
     
-    ghostRun := (Run@#; $Line=$Line-1; Return[])&
+______________________________________________________________________
+  
+  SetOptions[$Output,FormatType->OutputForm, PageWidth->120]
+ 
     
-    emptylogF := "> " <> Streams[][[1,1]] // ghostRun
+  ghostRun := (Run@#; $Line = $Line-1; Return[])&
     
-    catoutF := "cat " <> Streams[][[1,1]] <> " > /tmp/JWLS/wlout.txt" // 
-                ghostRun
-"----------------------------------------------------------------------"    
-    $Line = 0
-    Dialog[]' 
+  emptylogF := ghostRun["> "<>Streams[][[1,1]]]
+    
+  catoutF := ghostRun["cat "<>Streams[][[1,1]]<>" > /tmp/JWLS/wlout.txt"]
+                
+______________________________________________________________________
+  
+  $Line = 0
+  Dialog[]' 
 
+trap finish EXIT
 

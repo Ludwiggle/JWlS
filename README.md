@@ -2,33 +2,45 @@ work in progress!
 
 # JWLS
 
-A **J**upyter notebook for **W**olfram**L**anguage**S**cript
+A **J**upyter notebook for **W**olfram(**L**anguage)**S**cript
 
-Designed to provide a responsive HTML interface to a remote WolframScript interpreter with minimal overhead on the bash_kernel. 
+**JWLS** is a slimmed down version of the Jupyter [`bash_kernel`](https://github.com/takluyver/bash_kernel) 
+that pipes input cells into a [wolframscript](https://www.wolfram.com/wolframscript/) `Dialog[]` 
+through a temporary fifo, and it reads the corresponding outputs from
+the default wolframscript log file. 
+
+The goal of **JWLS** is to *extend* the wolframscript cli with a HTML-based REPL interface.
+As such, it comes particularly handy in cloud computing. 
+For instance, you can launch on a remote machine where the
+[intepreter](https://www.wolfram.com/cdf-player/) is installed, 
+and connect it to a Jupyter notebook interface that runs locally in your browser.
 
 
-### Install
+### Installation
 
-### Run
+Depen
+**Suggested**:`miniconda`, `firefox`
+
+1. Copy the `JWLS_kernel` into your conda installation folder e.g. `~/miniconda3/lib/python3.7/site-packages/ 
+2. Run the installation script in the kernel folder:  `python install.py`
+
+
+### Usage
 
 Run `JWLS.sh`
 
+Graphics is rendered by the Jupyter file viewer, not by notebook. 
+Show returns the URL of the graphical output.
 
 ### Features
 
-JWLS is a slimmed down version of the [`bash_kernel`](https://github.com/takluyver/bash_kernel) 
-that transfer Wolfram Language expressions to a [WolframKernel](https://www.wolfram.com/cdf-player/) 
-through the WolframScript interface. 
-
-Graphics is rendered by the Jupyter file viewer, not by notebook.
-`Show` returns the URL of the graphical output.
 
 
-The `Out[..]` expressions are returned on both the Jupyter notebook and the terminal where JWLS is started; though error messages, symbols `Information` and progress indicators are printed on terminal only.
+The `Out[..]` expressions are returned on both the Jupyter notebook and the terminal 
+where JWLS is started; though error messages, symbols `Information` and progress indicators are printed on terminal only.
 
 ![](JWLSrec.gif)
 
-The underlying `bash_kernel` is still accessible by starting a cell with `!`
 
 ![](bashCell.gif)
 
