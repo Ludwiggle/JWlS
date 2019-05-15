@@ -30,26 +30,17 @@ Depen
 Run `JWLS.sh`
 
 Graphics is rendered by the Jupyter file viewer, not by notebook. 
-Show returns the URL of the graphical output.
+`show` returns the URL of the graphical output.
 
 ### Features
-
-
 
 The `Out[..]` expressions are returned on both the Jupyter notebook and the terminal 
 where JWLS is started; though error messages, symbols `Information` and progress indicators are printed on terminal only.
 
-![](JWLSrec.gif)
-
-
-![](bashCell.gif)
-
-
-
 
 ### How it works
 
-The `JWLS.sh` script reads your `jupyter notebook list` to save the address of the **first** notebook found; that is needed by `Show`.  If Jupyter is not running, JWLS will start a new notebook. 
+The `JWLS.sh` script reads your `jupyter notebook list` to save the address of the **first** notebook found; that is needed by `show`.  If Jupyter is not running, JWLS will start a new notebook. 
 
 The WolframKernel is then initiated in REPL mode waiting for commands sent by the `kernel.py` through a temporary fifo.
 By default, wolframscript appends ouputs to a temporary log file; JWLS simply pipes the latest ouputs from that file back to Jupyter. 
