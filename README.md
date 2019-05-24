@@ -12,7 +12,7 @@ the default wolframscript log file.
 The goal of **JWLS** is to *extend* the wolframscript cli with a HTML-based REPL interface.
 As such, it comes particularly handy in cloud computing. 
 
-Given that it initiate by opening a `Dialog[]`, it should work regardless of what type of WolframKernel you have installed. 
+Given that it starts as a wolframscript -c(ommand) and calls a  `Dialog[]` , it should work regardless of what type of WolframKernel you have installed. 
 
 ### Installation
 
@@ -26,15 +26,19 @@ Assuming `miniconda` (Python 3.7) installed
 
 Run `JWLS.sh` or copy it in the executables path e.g. ` cp JWLS.sh /usr/local/bin/JWLS` .
 
+### Possible issues and Troubleshooting
+
+Check the path of `Names.wl.txt` in `kernel.py` cause it might be wrong for your particular Python installation.
+Check also if `JWLS.sh` has the correct path to `wolframscript`
+
 
 ### Features
 
-Graphics is rendered by the Jupyter file viewer, not by notebook. 
-`show` returns the clickable URL of the exported graphical output (unfortunately it works only by creating a dedicated folder called `JWLSout
-`).
-The `Out[..]` expressions are returned on both the Jupyter notebook and the terminal 
-where JWLS is started; though error messages, symbols `Information` and progress indicators are printed on terminal only.
+The custom `show` function returns the clickable URL of the exported graphical output. In this way, graphics is rendered by the Jupyter file viewer in a new browser tab, not within the notebook.
+Any epression or graphics that is not an `Image` is exported as a pdf (quickest export time and very accurate), otherwise it exports a png. 
 
+The `Out[..]` expressions are returned on both the Jupyter notebook and the terminal 
+where JWLS is started; though error messages, `Information` and progress indicators are printed on terminal only.
 
 
 ### How it works
