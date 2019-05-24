@@ -11,10 +11,8 @@ the default wolframscript log file.
 
 The goal of **JWLS** is to *extend* the wolframscript cli with a HTML-based REPL interface.
 As such, it comes particularly handy in cloud computing. 
-For instance, you can launch on a remote machine where the
-[intepreter](https://www.wolfram.com/cdf-player/) is installed, 
-and connect it to a Jupyter notebook interface that runs locally in your browser.
 
+Given that it initiate by opening a `Dialog[]`, it should work regardless of what type of WolframKernel you have installed. 
 
 ### Installation
 
