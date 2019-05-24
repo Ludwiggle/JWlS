@@ -26,10 +26,15 @@ Assuming `miniconda` (Python 3.7) installed
 
 Run `JWLS.sh` or copy it in the executables path e.g. ` cp JWLS.sh /usr/local/bin/JWLS` .
 
+In order to use it on a cloud compute virtual machine, modify the `nbAddrF` function by adding `jupyter notebook --no-browser --port=7000` . Then `screen` a session run `JWLS` and detach it. Go back to your local machine and   `ssh -N -f -L  localhost:6001:localhost:7000  <IP>"`.
+For AWS instances also add the pem. For Google Cloud follow their instructions. 
+
 ### Possible issues and Troubleshooting
 
 Check the path of `Names.wl.txt` in `kernel.py` cause it might be wrong for your particular Python installation.
-Check also if `JWLS.sh` has the correct path to `wolframscript`
+Check also if `JWLS.sh` has the correct path to `wolframscript`.
+
+If your system is generally slow and `JWLS.sh` opens more than one jupyter-notebook server, you might want to increase the `Pause` timing in the `nbAddrF` function which is reponsible for that. 
 
 
 ### Features
