@@ -11,7 +11,7 @@ import signal
 import os
 
 # W completions
-WNames = open('/home/nicola/miniconda3/lib/python3.7/site-packages/JWLS_kernel/Names.wl.txt',
+WNames = open('~/miniconda3/lib/python3.7/site-packages/JWLS_kernel/Names.wl.txt',
               'r').read().split()
 
 
