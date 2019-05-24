@@ -18,24 +18,25 @@ and connect it to a Jupyter notebook interface that runs locally in your browser
 
 ### Installation
 
-Depen
-**Suggested**:`miniconda`, `firefox`
+Assuming `miniconda` (Python 3.7) installed
 
-1. Copy the `JWLS_kernel` into your conda installation folder e.g. `~/miniconda3/lib/python3.7/site-packages/ 
-2. Run the installation script in the kernel folder:  `python install.py`
+1. Copy the kernel folder `JWLS_kernel` into your python installation folder e.g. `~/miniconda3/lib/python3.7/site-packages/ 
+2. Run the installation script  `python install.py` (it's in the kernel folder)
 
 
 ### Usage
 
-Run `JWLS.sh`
+Run `JWLS.sh` or copy it in the executables path e.g. ` cp JWLS.sh /usr/local/bin/JWLS` .
 
-Graphics is rendered by the Jupyter file viewer, not by notebook. 
-`show` returns the URL of the graphical output.
 
 ### Features
 
+Graphics is rendered by the Jupyter file viewer, not by notebook. 
+`show` returns the clickable URL of the exported graphical output (unfortunately it works only by creating a dedicated folder called `JWLSout
+`).
 The `Out[..]` expressions are returned on both the Jupyter notebook and the terminal 
 where JWLS is started; though error messages, symbols `Information` and progress indicators are printed on terminal only.
+
 
 
 ### How it works
@@ -43,5 +44,5 @@ where JWLS is started; though error messages, symbols `Information` and progress
 The `JWLS.sh` script reads your `jupyter notebook list` to save the address of the **first** notebook found; that is needed by `show`.  If Jupyter is not running, JWLS will start a new notebook. 
 
 The WolframKernel is then initiated in REPL mode waiting for commands sent by the `kernel.py` through a temporary fifo.
-By default, wolframscript appends ouputs to a temporary log file; JWLS simply pipes the latest ouputs from that file back to Jupyter. 
+By default, wolframscript appends ouputs to a temporary log file; JWLS simply pipes the latest ouputs from that log back to Jupyter. 
 
