@@ -41,7 +41,9 @@ The custom `show` function returns the clickable URL of the exported graphical o
 Any epression or graphics that is not an `Image` is exported as a pdf (quickest export time and very accurate), otherwise it exports a png. 
 
 The `Out[..]` expressions are returned on both the Jupyter notebook and the terminal 
-where JWLS is started; though error messages, `Information` and progress indicators are printed on terminal only.
+where JWLS is started.
+On Wolfram Kernels prior to V12,  error messages, `Information` and progress indicators are printed on terminal only.
+With the new Wolfram Engine (for developers) errors and `Information` are given back to the standard ouput but still, progress indicators or incremental ouputs like `Do[ Print@"hello"; Pause@1, 3 ]` returns only at the end of the execution; keep an eye on the terminal for those. 
 
 
 ### How it works
