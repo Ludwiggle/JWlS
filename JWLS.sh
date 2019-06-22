@@ -40,7 +40,8 @@ ______________________________________________________________________
   show@g_ := "echo "<>$nbAddr<>Export["JWLSout/out.pdf",g,"PDF"]// 
              (Run@#; Return@Last@StringSplit@#)&
               
-             
+  show@g_Graphics3D := "wolframplayer -nosplash "<>Export["JWLSout/out.nb",g] // Run
+  
              
   Protect@show
     
