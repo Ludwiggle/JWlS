@@ -12,8 +12,6 @@ The goal of **JWLS** is to *extend* the wolframscript cli with a HTML-based REPL
 * "!command" runs Bash commands
 * Vector graphics outputs displayed by the Jupyter file viewer
 * 3D and Dynamic displayed by `wolframplayer`
-* It works also on older versions of CDFPlayer
-
 
 ### Installation
 
