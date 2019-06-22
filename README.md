@@ -47,7 +47,7 @@ The `JWLS.sh` script reads your `jupyter notebook list` to save the address of t
 
 The custom `show` function returns the clickable URL of the exported graphical output. In this way, graphics is rendered by the Jupyter file viewer in a new browser tab, not within the notebook.
 Any epression or graphics that is not an `Image` is exported as a pdf (quickest export time and very accurate), otherwise it exports a png. 
-`show` exports 3D graphics or `Dynamic` stuff like `Manipulate` as notebooks to be open with the `wolframplayer` which gets installed with [Wolfram Engine](https://www.wolfram.com/engine/) and it can be found on`../WolframEngine/12.0/Executables/wolframplayer`. Be sure to have it in your `PATH`.
+`show` exports 3D graphics or `Dynamic` stuff like `Manipulate` as notebooks and lanuch `wolframplayer` to interact with them. `wolframplayer` gets installed with [Wolfram Engine](https://www.wolfram.com/engine/) and the executable can be found on`../WolframEngine/12.0/Executables/wolframplayer`. Be sure to have it in your `PATH`.
 
 The `Out[..]` expressions are returned on both the Jupyter notebook and the terminal 
 where JWLS is started.
