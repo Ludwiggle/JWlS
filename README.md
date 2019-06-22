@@ -33,6 +33,7 @@ For AWS instances also add the pem. For Google Cloud follow their instructions.
 
 ### Possible issues and Troubleshooting
 
+On MacOs, if `sed` gives error substitute it with `gsed`; see this [discussion]
 If your system is generally slow and `JWLS.sh` opens more than one jupyter-notebook server, you might want to increase the `Pause` timing in the `nbAddrF` function which is reponsible for that. 
 
 
@@ -47,6 +48,7 @@ The `JWLS.sh` script reads your `jupyter notebook list` to save the address of t
 
 The custom `show` function returns the clickable URL of the exported graphical output. In this way, graphics is rendered by the Jupyter file viewer in a new browser tab, not within the notebook.
 Any epression or graphics that is not an `Image` is exported as a pdf (quickest export time and very accurate), otherwise it exports a png. 
+`show` exports 3D graphics as notebooks to be open with the `wolframplayer` which gets installed with [Wolfram Engine](https://www.wolfram.com/engine/) and it can be found on`../WolframEngine/12.0/Executables/wolframplayer`. Be sure to have it in your `PATH`.
 
 The `Out[..]` expressions are returned on both the Jupyter notebook and the terminal 
 where JWLS is started.
