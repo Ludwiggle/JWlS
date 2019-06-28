@@ -27,7 +27,7 @@ Check also if `JWLS.sh` points the actual `wolframscript` executable.
 
 Run `JWLS.sh` or copy it in the executables path e.g. ` cp JWLS.sh /usr/local/bin/JWLS` .
 
-In order to use it on a cloud compute virtual machine, modify the `nbAddrF` function by adding `jupyter notebook --no-browser --port=7000` . Then `screen` a session run `JWLS` and detach it. Go back to your local machine and   `ssh -N -f -L  localhost:6001:localhost:7000  <IP>"`.
+In order to use it on a cloud compute virtual machine, modify the `nbAddrF` function by adding `jupyter notebook --no-browser --port=7000` . Then `screen` a session, run `JWLS` and detach it. Go back to your local machine and   `ssh -N -f -L  localhost:6001:localhost:7000  <IP>"`.
 For AWS instances also add the pem. For Google Cloud follow their instructions. 
 
 ### Possible issues and Troubleshooting
