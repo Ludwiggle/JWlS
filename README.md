@@ -19,9 +19,7 @@ Assuming `miniconda` (Python 3.7) installed
 
 1. Copy the kernel folder `JWLS_kernel` into your python installation folder e.g. `~/miniconda3/lib/python3.7/site-packages/ 
 2. Run the installation script  `python install.py` (it's in the kernel folder)
-
-3. Modify the path of `Names.wl.txt` in `kernel.py` because it requires the full path instead of `~` .
-Check also if `JWLS.sh` points the actual `wolframscript` executable.
+3. Check if `JWLS.sh` points the actual `wolframscript` executable.
 
 ### Usage
 

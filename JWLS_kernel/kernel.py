@@ -10,9 +10,15 @@ import signal
 
 import os
 
+# https://stackoverflow.com/a/20885799/10155767
+try:
+    import importlib.resources as pkg_resources
+except ImportError:
+    # Try backported to PY<37 `importlib_resources`.
+    import importlib_resources as pkg_resources
+
 # W completions
-WNames = open('~/miniconda3/lib/python3.7/site-packages/JWLS_kernel/Names.wl.txt',
-              'r').read().split()
+WNames = pkg_resources.read_text(__package__, 'Names.wl.txt').split()
 
 
 __version__ = '0.7.1'
