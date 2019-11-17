@@ -10,6 +10,8 @@ import signal
 
 import os
 
+from .sessions import FifoWolframscriptSession
+
 # https://stackoverflow.com/a/20885799/10155767
 try:
     import importlib.resources as pkg_resources
@@ -91,13 +93,22 @@ class BashKernel(Kernel):
 
     def __init__(self, **kwargs):
         Kernel.__init__(self, **kwargs)
+        self._start_wolframscript()
         self._start_bash()
+
+    def _start_wolframscript(self):
+        self.wolframscript = FifoWolframscriptSession()
+        self.temp_path = str(self.wolframscript.temp_path)
+
+    def do_shutdown(self, restart):
+        self.wolframscript.close()
 
     def _start_bash(self):
         # Signal handlers are inherited by forked processes, and we can't easily
         # reset it from the subprocess. Since kernelapp ignores SIGINT except in
         # message handlers, we need to temporarily reset the SIGINT handler here
         # so that bash and its children are interruptible.
+        pexpect.spawn(f"echo Temp path: {self.temp_path}")
         sig = signal.signal(signal.SIGINT, signal.SIG_DFL)
         try:
             # Note: the next few lines mirror functionality in the
@@ -145,7 +156,7 @@ class BashKernel(Kernel):
         self.silent = silent
         if not code[0] =='!':
             # Pipe wl code into the fifo
-            code = 'echo ' + "'" + code + "'" + '> /tmp/JWLS/wlin.fifo'
+            code = f"echo '{code}'> '{self.temp_path}/wlin.fifo'"
         else:
             code = code[1:]
         if not code.strip():
@@ -155,9 +166,9 @@ class BashKernel(Kernel):
         interrupted = False
         try:
             # empty the WolframScript log file
-            self.bashwrapper.run_command("echo 'emptylogF' > /tmp/JWLS/wlin.fifo ", timeout=None)
+            self.bashwrapper.run_command(f"echo 'emptylogF' > '{self.temp_path}/wlin.fifo'", timeout=None)
             # auxiliary file to check
-            self.bashwrapper.run_command("cat /tmp/JWLS/wlout.txt > /tmp/JWLS/wlout2", timeout=None)
+            self.bashwrapper.run_command(f"cat '{self.temp_path}/wlout.txt' > '{self.temp_path}/wlout2' ", timeout=None)
 
             # Note: timeout=None tells IREPLWrapper to do incremental
             # output.  Also note that the return value from
@@ -165,10 +176,10 @@ class BashKernel(Kernel):
             # already sent by IREPLWrapper.
             self.bashwrapper.run_command(code.rstrip(), timeout=None)
             # pipe the latest outputs to  .wlout.txt 
-            self.bashwrapper.run_command("echo 'catoutF' > /tmp/JWLS/wlin.fifo ", timeout=None)  
+            self.bashwrapper.run_command(f"echo 'catoutF' > '{self.temp_path}/wlin.fifo' ", timeout=None)
             # show last outputs
-            self.bashwrapper.run_command("while cmp -s /tmp/JWLS/wlout.txt /tmp/JWLS/wlout2 ; do sleep 0.1 ; done ; sleep 0.1 ; tail -n +2 /tmp/JWLS/wlout.txt | grep . | sed '0~1 a\\\'", timeout=None)    
-            # self.bashwrapper.run_command('cat /tmp/JWLS/wlout.txt', timeout=None)            
+            self.bashwrapper.run_command(f"while cmp -s '{self.temp_path}/wlout.txt' '{self.temp_path}/wlout2' ; do sleep 0.1 ; done ; sleep 0.1 ; tail -n +2 '{self.temp_path}/wlout.txt' | grep . | sed '0~1 a\\\'", timeout=None)
+            # self.bashwrapper.run_command(f"cat '{self.temp_path}/wlout.txt'", timeout=None)            
             
         except KeyboardInterrupt:
             self.bashwrapper.child.sendintr()
