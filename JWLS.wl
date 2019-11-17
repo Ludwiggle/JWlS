@@ -69,13 +69,16 @@ If[ValueQ[$nbURL],
 ______________________________________________________________________
 
 
-show@g_Image := "echo "<>$nbAddr<>Export["JWLSout/out.png",g,"PNG"]//
+$graphicsBaseName := ("JWLSout/" <> IntegerString[Hash[#], 36])&
+
+show@g_Image := "echo "<>$nbAddr<>Export[$graphicsBaseName[g] <> ".png",g,"PNG"]//
                  (Run@#; Return@Last@StringSplit@#)&
 
-show@g_ := "echo "<>$nbAddr<>Export["JWLSout/out.pdf",g,"PDF"]//
+show@g_ := "echo "<>$nbAddr<>Export[$graphicsBaseName[g] <> ".pdf",g,"PDF"]//
            (Run@#; Return@Last@StringSplit@#)&
 
-show@g_Graphics3D := "wolframplayer -nosplash "<>Export["JWLSout/out.nb",g] // Run
+show@g_Graphics3D := "wolframplayer -nosplash " <> 
+                      Export[$graphicsBaseName[g] <> ".nb",g] // Run
 
 
 Protect@show
