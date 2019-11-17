@@ -3,6 +3,54 @@
 ______________________________________________________________________
 
 
+argv = Rest@$ScriptCommandLine
+argc = Length@argv
+
+(* Default value *)
+$nbTmp = "/tmp/JWLS"
+
+unrecognized =
+  (* Use ReplaceAll to parse arguments from beginning of argv. *)
+  argv //.
+    {
+
+      (* For robustness, translate from {"--arg=value"} syntax
+         to {"--arg", "value"} syntax. *)
+      {argEqVal_, rest___} /; (
+        (* Construct a list of matches of the form --arg=value and put
+           them in the form {"--arg", "value"}. *)
+          matches =
+            StringCases[argEqVal,
+              RegularExpression["--([^=]+)=(.*)"] :> {"--$1", "$2"}];
+              (* There should only be one such match. *)
+              Length[matches] == 1
+      ) :>
+       (* Replace the single match while preserving the rest of the
+          list. *)
+       Join[matches[[1]], {rest}],
+
+      {"--url",    val_, rest___} :> ($nbURL = val; {rest}),
+      {"--tmpdir", val_, rest___} :> ($nbTmp = val; {rest})
+    };
+
+(* Throw error if something left over. *)
+If[Length[unrecognized] > 0,
+  Print["Unrecognized arguments from: ", StringRiffle[unrecognized]];
+  Exit[1]
+]
+
+(* Delete temporary variables *)
+matches =.
+unrecognized = .
+
+Print[$nbURL]
+Print[$nbTmp]
+
+______________________________________________________________________
+
+
+(* Lazily-evaluated notebook URL function which starts
+   notebook as needed. *)
 nbAddrF := ReadString@"!jupyter notebook list"~
            StringCases~Shortest["http://"~~__~~"/"]//
            If[# == {}
@@ -11,7 +59,12 @@ nbAddrF := ReadString@"!jupyter notebook list"~
                ,Print["\n~: "<>First@#]; First@#<>"files/"
              ]&
 
-$nbAddr = nbAddrF
+(* If URL is specified from command line, then use that.
+   Otherwise, run the function above. *)
+If[ValueQ[$nbURL],
+  $nbAddr = $nbURL <> "/files/", 
+  $nbAddr = nbAddrF
+]
 
 ______________________________________________________________________
 
@@ -39,7 +92,7 @@ ghostRun := (Run@#; $Line = $Line-1; Return[])&
 
 emptylogF := ghostRun["> "<>Streams[][[1,1]]]
 
-catoutF := ghostRun["cat "<>Streams[][[1,1]]<>" > /tmp/JWLS/wlout.txt"]
+catoutF := ghostRun["cat "<>Streams[][[1,1]]<>" > " <> $nbTmp <> "/wlout.txt"]
 
 ______________________________________________________________________
 
