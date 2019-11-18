@@ -62,19 +62,19 @@ nbAddrF := ReadString@"!jupyter notebook list"~
 (* If URL is specified from command line, then use that.
    Otherwise, run the function above. *)
 If[ValueQ[$nbURL],
-  $nbAddr = $nbURL <> "/files/", 
+  $nbAddr = $nbURL, 
   $nbAddr = nbAddrF
 ]
 
 ______________________________________________________________________
 
 
-$graphicsBaseName := ("JWLSout/" <> IntegerString[Hash[#], 36])&
+$graphicsBaseName := ($nbTmp <> "/output_files/" <> IntegerString[Hash[#], 36])&
 
-show@g_Image := "echo "<>$nbAddr<>Export[$graphicsBaseName[g] <> ".png",g,"PNG"]//
+show@g_Image := "echo "<>$nbAddr<>"/"<>FileNameTake@Export[$graphicsBaseName[g] <> ".png",g,"PNG"]//
                  (Run@#; Return@Last@StringSplit@#)&
 
-show@g_ := "echo "<>$nbAddr<>Export[$graphicsBaseName[g] <> ".pdf",g,"PDF"]//
+show@g_ := "echo "<>$nbAddr<>"/"<>FileNameTake@Export[$graphicsBaseName[g] <> ".pdf",g,"PDF"]//
            (Run@#; Return@Last@StringSplit@#)&
 
 show@g_Graphics3D := "wolframplayer -nosplash " <> 
