@@ -19,19 +19,13 @@ Assuming `miniconda` (Python 3.7) installed
 
 1. Copy the kernel folder `JWLS_kernel` into your python installation folder e.g. `~/miniconda3/lib/python3.7/site-packages/ 
 2. Run the installation script  `python install.py` (it's in the kernel folder)
-3. Check if `JWLS.sh` points the actual `wolframscript` executable.
+3. Verify that `wolframscript` is in the `PATH`.  If not, you may need to add a line to the bottom of your `~/.profile` such as `PATH=/path/to/wolframscript:$PATH`
 
 ### Usage
 
-Copy `JWLS.sh` and `JWLS.wl` to the executables path e.g. `cp JWLS.sh JWLS.wl /usr/local/bin/` .
-
-In order to use it on a cloud compute virtual machine, modify the `nbAddrF` function by adding `jupyter notebook --no-browser --port=7000` . Then `screen` a session, run `JWLS` and detach it. Go back to your local machine and   `ssh -N -f -L  localhost:6001:localhost:7000  <IP>"`.
+Run `jupyter notebook`, click on the "New" button, and choose "JWLS".
+In order to use it on a cloud compute virtual machine, run `jupyter notebook --no-browser --port=7000` . Go back to your local machine and   `ssh -N -f -L  localhost:7000:localhost:7000  <IP>"`.
 For AWS instances also add the pem. For Google Cloud follow their instructions. 
-
-### Possible issues and Troubleshooting
-
-On MacOs, if `sed` gives error substitute it with `gsed`; see this [discussion]
-If your system is generally slow and `JWLS.sh` opens more than one jupyter-notebook server, you might want to increase the `Pause` timing in the `nbAddrF` function which is reponsible for that. 
 
 
 ### How it works
@@ -41,10 +35,8 @@ that pipes input cells into a [wolframscript](https://www.wolfram.com/wolframscr
 through a temporary fifo, and it reads the corresponding outputs from
 the default wolframscript log file. 
 
-The `JWLS.sh` script reads your `jupyter notebook list` to save the address of the **first** notebook found; that is needed by `show`.  If Jupyter is not running, JWLS will start a new notebook. 
-
 The custom `show` function returns the clickable URL of the exported graphical output. In this way, graphics is rendered by the Jupyter file viewer in a new browser tab, not within the notebook.
-Any epression or graphics that is not an `Image` is exported as a pdf (quickest export time and very accurate), otherwise it exports a png. 
+Any expression or graphics that is not an `Image` is exported as a pdf (quickest export time and very accurate), otherwise it exports a png. 
 `show` exports 3D graphics or `Dynamic` stuff like `Manipulate` as notebooks and lanuch `wolframplayer` to interact with them. `wolframplayer` gets installed with [Wolfram Engine](https://www.wolfram.com/engine/) and the executable can be found on`../WolframEngine/12.0/Executables/wolframplayer`. Be sure to have it in your `PATH`.
 
 The `Out[..]` expressions are returned on both the Jupyter notebook and the terminal 
