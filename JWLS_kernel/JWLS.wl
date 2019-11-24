@@ -91,7 +91,7 @@ ______________________________________________________________________
 SetOptions[$Output,FormatType->OutputForm, PageWidth->120]
 
 
-ghostRun := (Run@#; $Line = $Line-1; Return[])&
+ghostRun := ($lastRes=%; Run@#; $Line = $Line-1; $lastRes; Return[])&
 
 emptylogF := ghostRun["> "<>Streams[][[1,1]]]
 
