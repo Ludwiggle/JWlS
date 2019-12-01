@@ -2,12 +2,13 @@
 
 ______________________________________________________________________
 
+(* This section parses command line arguments *)
 
-argv = Rest@$ScriptCommandLine
-argc = Length@argv
+argv = Rest@$ScriptCommandLine;
+argc = Length@argv;
 
 (* Default value *)
-$nbTmp = "/tmp/JWLS"
+$nbTmp = "/tmp/JWLS";
 
 unrecognized =
   (* Use ReplaceAll to parse arguments from beginning of argv. *)
@@ -37,14 +38,14 @@ unrecognized =
 If[Length[unrecognized] > 0,
   Print["Unrecognized arguments from: ", StringRiffle[unrecognized]];
   Exit[1]
-]
+];
 
 (* Delete temporary variables *)
-matches =.
-unrecognized = .
+matches =.;
+unrecognized =.;
 
-Print[$nbURL]
-Print[$nbTmp]
+Print[$nbURL];
+Print[$nbTmp];
 
 ______________________________________________________________________
 
@@ -57,48 +58,48 @@ nbAddrF := ReadString@"!jupyter notebook list"~
                ,(Print["\n$:"<>#]; Run@#)& @"jupyter notebook &";
                  Pause@1; nbAddrF
                ,Print["\n~: "<>First@#]; First@#<>"files/"
-             ]&
+             ]&;
 
 (* If URL is specified from command line, then use that.
    Otherwise, run the function above. *)
 If[ValueQ[$nbURL],
   $nbAddr = $nbURL, 
   $nbAddr = nbAddrF
-]
+];
 
 ______________________________________________________________________
 
 
-$graphicsBaseName := ($nbTmp <> "/output_files/" <> IntegerString[Hash[#], 36])&
+$graphicsBaseName := ($nbTmp <> "/output_files/" <> IntegerString[Hash[#], 36])&;
 
 show@g_Image := "echo "<>$nbAddr<>"/"<>FileNameTake@Export[$graphicsBaseName[g] <> ".png",g,"PNG"]//
-                 (Run@#; Return@Last@StringSplit@#)&
+                 (Run@#; Return@Last@StringSplit@#)&;
 
 show@g_ := "echo "<>$nbAddr<>"/"<>FileNameTake@Export[$graphicsBaseName[g] <> ".pdf",g,"PDF"]//
-           (Run@#; Return@Last@StringSplit@#)&
+           (Run@#; Return@Last@StringSplit@#)&;
 
 show@g_Graphics3D := "wolframplayer -nosplash " <> 
-                      Export[$graphicsBaseName[g] <> ".nb",g] // Run
+                      Export[$graphicsBaseName[g] <> ".nb",g] // Run;
 
 
-Protect@show
+Protect@show;
 
 $PrePrint = Shallow[ #,{Infinity,12}]&;
 
 ______________________________________________________________________
 
 
-SetOptions[$Output,FormatType->OutputForm, PageWidth->120]
+SetOptions[$Output,FormatType->OutputForm, PageWidth->120];
 
 
-ghostRun := ($lastRes=%; Run@#; $Line = $Line-1; $lastRes; Return[])&
+ghostRun := ($lastRes=%; Run@#; $Line = $Line-1; $lastRes; Return[])&;
 
-emptylogF := ghostRun["> "<>Streams[][[1,1]]]
+emptylogF := ghostRun["> "<>Streams[][[1,1]]];
 
-catoutF := ghostRun["cat "<>Streams[][[1,1]]<>" > " <> $nbTmp <> "/wlout.txt"]
+catoutF := ghostRun["cat "<>Streams[][[1,1]]<>" > " <> $nbTmp <> "/wlout.txt"];
 
 ______________________________________________________________________
 
 
-$Line = 0
-Dialog[]
+$Line = 0;
+Dialog[];
