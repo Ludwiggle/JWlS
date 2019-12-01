@@ -166,7 +166,7 @@ class BashKernel(Kernel):
         interrupted = False
         try:
             # empty the WolframScript log file
-            self.bashwrapper.run_command(f"echo 'emptylogF' > '{self.temp_path}/wlin.fifo'", timeout=None)
+            self.bashwrapper.run_command(f"echo 'JWLSemptylogF' > '{self.temp_path}/wlin.fifo'", timeout=None)
             # auxiliary file to check
             self.bashwrapper.run_command(f"cat '{self.temp_path}/wlout.txt' > '{self.temp_path}/wlout2' ", timeout=None)
 
@@ -176,7 +176,7 @@ class BashKernel(Kernel):
             # already sent by IREPLWrapper.
             self.bashwrapper.run_command(code.rstrip(), timeout=None)
             # pipe the latest outputs to  .wlout.txt 
-            self.bashwrapper.run_command(f"echo 'catoutF' > '{self.temp_path}/wlin.fifo' ", timeout=None)
+            self.bashwrapper.run_command(f"echo 'JWLScatoutF' > '{self.temp_path}/wlin.fifo' ", timeout=None)
             # show last outputs
             self.bashwrapper.run_command(f"while cmp -s '{self.temp_path}/wlout.txt' '{self.temp_path}/wlout2' ; do sleep 0.1 ; done ; sleep 0.1 ; tail -n +2 '{self.temp_path}/wlout.txt' | grep . | sed '0~1 a\\\'", timeout=None)
             # self.bashwrapper.run_command(f"cat '{self.temp_path}/wlout.txt'", timeout=None)            
