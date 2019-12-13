@@ -33,8 +33,16 @@ class FifoWolframscriptSession:
         p = str(self.temp_path)
         cmd = f'bash -c "tail -f {p}/wlin.fifo | ' + \
             f'{p}/JWLS.wl --tmpdir={p} ' + \
-            f'--url={get_notebook_url()}files/{self.temp_path.name}"'
-        print(cmd)
+            f'--url={get_notebook_url()}files/{self.temp_path.name} '
+
+        try:
+            if os.environ['JWLS_NO_PLAYER'].lower() in ['y', 'yes', 't', 'true']:
+                cmd += '--no-player '
+        except KeyError:
+            pass
+        cmd += '"'
+
+        #os.write(1, f"{cmd}\n".encode())
         self.child = pexpect.spawn(cmd)
 
     def close(self):

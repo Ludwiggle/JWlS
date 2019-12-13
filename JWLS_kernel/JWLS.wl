@@ -30,8 +30,9 @@ unrecognized =
           list. *)
        Join[matches[[1]], {rest}],
 
-      {"--url",    val_, rest___} :> ($JWLSnbURL = val; {rest}),
-      {"--tmpdir", val_, rest___} :> ($JWLSnbTmp = val; {rest})
+      {"--url",    val_, rest___} :> ($JWLSnbURL = val;     {rest}),
+      {"--no-player", rest___}    :> ($JWLSnoPlayer = True; {rest}),
+      {"--tmpdir", val_, rest___} :> ($JWLSnbTmp = val;     {rest})
     };
 
 (* Throw error if something left over. *)
@@ -72,14 +73,20 @@ ______________________________________________________________________
 
 $JWLSgraphicsBaseName := ($JWLSnbTmp <> "/output_files/" <> IntegerString[Hash[#], 36])&;
 
-show@g_Image := "echo "<>$JWLSnbAddr<>"/"<>FileNameTake@Export[$JWLSgraphicsBaseName[g] <> ".png",g,"PNG"]//
+JWLSexportAndShowLink[g_, ext_String] :=
+  "echo "<>$JWLSnbAddr<>"/"<>FileNameTake@Export[$JWLSgraphicsBaseName[g] <> ext,g]//
                  (Run@#; Return@Last@StringSplit@#)&;
 
-show@g_ := "echo "<>$JWLSnbAddr<>"/"<>FileNameTake@Export[$JWLSgraphicsBaseName[g] <> ".pdf",g,"PDF"]//
-           (Run@#; Return@Last@StringSplit@#)&;
+  showpdf[g_] := JWLSexportAndShowLink[g, ".pdf"];
+  showpng[g_] := JWLSexportAndShowLink[g, ".png"];
+   shownb[g_] := JWLSexportAndShowLink[g, ".nb"];
+runplayer[g_] := "wolframplayer -nosplash " <>
+                Export[$JWLSgraphicsBaseName[g] <> ".nb",g] // Run;
 
-show@g_Graphics3D := "wolframplayer -nosplash " <> 
-                      Export[$JWLSgraphicsBaseName[g] <> ".nb",g] // Run;
+show[g_Image]      := showpng[g];
+show[g_Graphics]   := showpdf[g];
+show[g_Graphics3D] := If[$JWLSnoPlayer==True, showpdf[g], runplayer[g]];
+show[g_]           := showpdf[g];
 
 
 Protect@show;
