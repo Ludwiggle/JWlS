@@ -24,7 +24,7 @@ Assuming `miniconda` (Python 3.7) installed
 ### Usage
 
 Run `jupyter notebook`, click on the "New" button, and choose "JWLS".
-In order to use it on a cloud compute virtual machine, run `jupyter notebook --no-browser --port=7000` . Go back to your local machine and   `ssh -N -f -L  localhost:7000:localhost:7000  <IP>"`.
+In order to use it on a cloud compute virtual machine, run `JWLS_NO_PLAYER=true jupyter notebook --no-browser --port=7000` . Go back to your local machine and run `ssh -N -f -L  localhost:7000:localhost:7000  <IP>"`.
 For AWS instances also add the pem. For Google Cloud follow their instructions. 
 
 
@@ -37,10 +37,8 @@ the default wolframscript log file.
 
 The custom `show` function returns the clickable URL of the exported graphical output. In this way, graphics is rendered by the Jupyter file viewer in a new browser tab, not within the notebook.
 Any expression or graphics that is not an `Image` is exported as a pdf (quickest export time and very accurate), otherwise it exports a png. 
-`show` exports 3D graphics or `Dynamic` stuff like `Manipulate` as notebooks and lanuch `wolframplayer` to interact with them. `wolframplayer` gets installed with [Wolfram Engine](https://www.wolfram.com/engine/) and the executable can be found on`../WolframEngine/12.0/Executables/wolframplayer`. Be sure to have it in your `PATH`.
+`show` exports 3D graphics as notebooks and launch `wolframplayer` to interact with them. `wolframplayer` gets installed with [Wolfram Engine](https://www.wolfram.com/engine/) and the executable can be found on`../WolframEngine/12.0/Executables/wolframplayer`. Be sure to have it in your `PATH`.  For `Dynamic` stuff like `Manipulate` you can use the `shownb` function to launch `wolframplayer`.
 
-The `Out[..]` expressions are returned on both the Jupyter notebook and the terminal 
-where JWLS is started.
+The `Out[..]` expressions are returned on both the Jupyter notebook and the terminal where JWLS is started.
 On Wolfram Kernels prior to V12,  error messages, `Information` and progress indicators are printed on terminal only.
 With the new Wolfram Engine (for developers) errors and `Information` are given back to the standard ouput but still, progress indicators or incremental ouputs like `Do[ Print@"hello"; Pause@1, 3 ]` returns only at the end of the execution; keep an eye on the terminal for those. 
-
