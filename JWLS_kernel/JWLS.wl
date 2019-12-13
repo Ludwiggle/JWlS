@@ -77,17 +77,16 @@ JWLSexportAndShowLink[g_, ext_String] :=
   "echo "<>$JWLSnbAddr<>"/"<>FileNameTake@Export[$JWLSgraphicsBaseName[g] <> ext,g]//
                  (Run@#; Return@Last@StringSplit@#)&;
 
-  showpdf[g_] := JWLSexportAndShowLink[g, ".pdf"];
-  showpng[g_] := JWLSexportAndShowLink[g, ".png"];
-   shownb[g_] := JWLSexportAndShowLink[g, ".nb"];
 runplayer[g_] := "wolframplayer -nosplash " <>
                 Export[$JWLSgraphicsBaseName[g] <> ".nb",g] // Run;
+  showpdf[g_] := JWLSexportAndShowLink[g, ".pdf"];
+  showpng[g_] := JWLSexportAndShowLink[g, ".png"];
+   shownb[g_] := If[$JWLSnoPlayer===True, JWLSexportAndShowLink[g, ".nb"], runplayer[g]];
 
 show[g_Image]      := showpng[g];
 show[g_Graphics]   := showpdf[g];
-show[g_Graphics3D] := If[$JWLSnoPlayer==True, showpdf[g], runplayer[g]];
+show[g_Graphics3D] :=  shownb[g];
 show[g_]           := showpdf[g];
-
 
 Protect@show;
 
