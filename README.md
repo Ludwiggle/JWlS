@@ -1,3 +1,5 @@
+*For Linux users: upgrade to [JWLS_2](https://github.com/Ludwiggle/JWLS_2)*
+
 # JWLS
 
 A **J**upyter notebook for **W**olfram(**L**anguage)**S**cript.
